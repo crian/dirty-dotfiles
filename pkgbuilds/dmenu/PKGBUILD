@@ -1,0 +1,31 @@
+# Maintainer: crian <crian84@gmail.com>
+
+pkgname=dmenu-crian-git
+pkgver=r577.9ee710d
+pkgrel=1
+pkgdesc='A generic menu for X'
+arch=('x86_64')
+url="https://github.com/crian/suckless"
+license=('MIT')
+depends=('sh' 'libxinerama' 'libxft' 'freetype2')
+conflicts=('dmenu')
+provides=('dmenu')
+source=("git+${url}.git#branch=dmenu")
+sha256sums=('SKIP')
+
+pkgver() {
+    cd "$srcdir/suckless"
+    printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+prepare() {
+    cd "$srcdir/suckless"
+    echo 'Copying config.h from $startdir if it exists...'
+    [ -f "${startdir}/config.h" ] && cp "${startdir}/config.h" . || true
+}
+
+package() {
+    cd "$srcdir/suckless"
+    make PREFIX=/usr DESTDIR="$pkgdir" install
+    install -m644 -D LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}

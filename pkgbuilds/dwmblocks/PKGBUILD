@@ -1,0 +1,31 @@
+# Maintainer: crian <crian84@gmail.com>
+
+pkgname=dwmblocks
+pkgver=r32.b0e04ca
+pkgrel=1
+pkgdesc='Modular status bar for dwm'
+arch=('any')
+url="https://github.com/crian/suckless"
+license=('ISC')
+conflicts=('dwmblocks')
+provides=('dwmblocks')
+source=("git+${url}.git#branch=dwmblocks")
+sha256sums=('SKIP')
+
+pkgver() {
+    cd "$srcdir/suckless"
+    printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+prepare() {
+    cd "$srcdir/suckless"
+    echo 'Copying blocks.h from $startdir if it exists...'
+    [ -f "${startdir}/blocks.h" ] && cp "${startdir}/blocks.h" . || true
+}
+
+package() {
+    cd "$srcdir/suckless"
+    make PREFIX=/usr DESTDIR="$pkgdir" install
+    install -m644 -D LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+    install -m644 -D README.md "$pkgdir/usr/share/doc/$pkgname/README"
+}
