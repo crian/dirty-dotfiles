@@ -81,8 +81,7 @@ export PATH=$(du "$HOME/.bin" | cut -f2 | tr '\n' ':' | sed 's/:*$//'):$PATH
 # Variables
 export VISUAL="nvim"
 export EDITOR="nvim"
-export TERM="st"
-export TERMINAL=$TERM
+export TERMINAL="st"
 export BROWSER="brave"
 
 # LESS config
@@ -110,7 +109,7 @@ if [ -f $HOME/.config/lf/icons ]; then
 fi
 
 # pfetch config
-export PF_INFO="title os kernel pkgs memory wm shell term editor palette"
+export PF_INFO="ascii title os kernel pkgs memory wm shell term editor palette"
 
 # Options
 setopt INTERACTIVE_COMMENTS # Enable comments in interactive shell.
@@ -354,7 +353,7 @@ zstyle ':completion:*:manuals.(^1*)' insert-sections true
 #
 
 # Source plugin
-. /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+. /usr/share/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
 
 #
 # History substring search
