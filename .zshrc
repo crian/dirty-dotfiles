@@ -82,10 +82,11 @@ export PATH=$(du "$HOME/.bin" | cut -f2 | tr '\n' ':' | sed 's/:*$//'):$PATH
 export VISUAL="nvim"
 export EDITOR="nvim"
 export TERMINAL="st"
-export BROWSER="brave"
+export PAGER="less"
+export BROWSER="chromium"
 
 # LESS config
-export LESS='-R --mouse --wheel-lines=3'
+export LESS='-g -i -M -R -S -w -z-4'
 export LESS_TERMCAP_mb="$(printf '%b' '[1;31m')"
 export LESS_TERMCAP_md="$(printf '%b' '[1;36m')"
 export LESS_TERMCAP_me="$(printf '%b' '[0m')"
