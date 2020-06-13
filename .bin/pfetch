@@ -120,8 +120,8 @@ get_os() {
             #
             # If the kernel version string ends in "-Microsoft",
             # we're very likely running under Windows 10 in WSL1.
-            [ "${kernel%%*-Microsoft}" ] ||
-                distro="$distro on Windows 10 [WSL1]"
+            if [ "$WSLENV" ]; then
+                distro="${distro}${WSLENV+ on Windows 10 [WSL2]}"
 
             # Check to see if Linux is running in Windows 10 under
             # WSL2 (Windows subsystem for Linux [version 2]) and
@@ -130,7 +130,9 @@ get_os() {
             # This checks to see if '$WSLENV' is defined. This
             # appends the Windows 10 string even if '$WSLENV' is
             # empty. We only need to check that is has been _exported_.
-            distro="${distro}${WSLENV+ on Windows 10 [WSL2]}"
+            elif [ -z "${kernel%%*-Microsoft}" ]; then
+                distro="$distro on Windows 10 [WSL1]"
+            fi
         ;;
 
         Darwin*)
@@ -211,7 +213,10 @@ get_kernel() {
     case $os in
         # Don't print kernel output on some systems as the
         # OS name includes it.
-        *BSD*|Haiku|Minix) ;;
+        *BSD*|Haiku|Minix)
+            return
+        ;;
+    esac
 
         *)
             # '$kernel' is the cached output of 'uname -r'.
@@ -328,6 +333,25 @@ get_uptime() {
             IFS='	.' read -r _ s _ <<-EOF
 				$(kstat -p unix:0:system_misc:snaptime)
 			EOF
+        ;;
+
+        IRIX)
+            # Grab the uptime in a pretty format. Usually,
+            # 00:00:00 from the 'ps' command.
+            t=$(LC_ALL=POSIX ps -o etime= -p 1)
+
+            # Split the pretty output into days or hours
+            # based on the uptime.
+            case $t in
+                *-*)   d=${t%%-*} t=${t#*-} ;;
+                *:*:*) h=${t%%:*} t=${t#*:} ;;
+            esac
+
+            h=${h#0} t=${t#0}
+
+            # Convert the split pretty fields back into
+            # seconds so we may re-convert them to our format.
+            s=$((${d:-0}*86400 + ${h:-0}*3600 + ${t%%:*}*60 + ${t#*:}))
         ;;
     esac
 
@@ -623,6 +647,27 @@ get_memory() {
             mem_free=$((pages_free * hw_pagesize / 1024 / 1024))
             mem_used=$((mem_full - mem_free))
         ;;
+
+        IRIX)
+            # Read the memory information from the 'top' command. Parse
+            # and split each line until we reach the line starting with
+            # "Memory".
+            #
+            # Example output: Memory: 160M max, 147M avail, .....
+            while IFS=' :' read -r label mem_full _ mem_free _; do
+                case $label in
+                    Memory)
+                        mem_full=${mem_full%M}
+                        mem_free=${mem_free%M}
+                        break
+                    ;;
+                esac
+            done <<-EOF
+                $(top -n)
+			EOF
+
+            mem_used=$((mem_full - mem_free))
+        ;;
     esac
 
     log memory "${mem_used:-?}M / ${mem_full:-?}M"
@@ -774,8 +819,8 @@ get_shell() {
 }
 
 get_term() {
-	# Display the value of the '$TERM' environment variable.
-	log term "$TERM"
+    # Display the value of the '$TERM' environment variable.
+    log term "${TERM%%-*}" >&6
 }
 
 get_editor() {
@@ -796,7 +841,7 @@ get_palette() {
     # Print the palette with a new-line before and afterwards.
     printf '\n' >&6
     log "$palette
-        " " "
+        " " " >&6
 }
 
 get_ascii() {
@@ -987,6 +1032,22 @@ get_ascii() {
 			EOF
         ;;
 
+        [Gg][Nn][Uu]*)
+            read_ascii 3 <<-EOF
+				${c2}    _-\`\`-,   ,-\`\`-_
+				${c2}  .'  _-_|   |_-_  '.
+				${c2}./    /_._   _._\\    \\.
+				${c2}:    _/_._\`:'_._\\_    :
+				${c2}\\:._/  ,\`   \\   \\ \\_.:/
+				${c2}   ,-';'.@)  \\ @) \\
+				${c2}   ,'/'  ..- .\\,-.|
+				${c2}   /'/' \\(( \\\` ./ )
+				${c2}    '/''  \\_,----'
+				${c2}      '/''   ,;/''
+				${c2}         \`\`;'
+			EOF
+        ;;
+
         [Gg]uix[Ss][Dd]*|[Gg]uix*)
             read_ascii 3 <<-EOF
 				${c3}|.__          __.|
@@ -1021,6 +1082,29 @@ get_ascii() {
 				 ${c7} /  ___ \\
 				 ${c7}/ .\`   \`.\\
 				${c7}/.\`      \`.\\
+			EOF
+        ;;
+
+        [Ii][Rr][Ii][Xx]*)
+            read_ascii 1 <<-EOF
+				${c1} __
+				${c1} \\ \\   __
+				${c1}  \\ \\ / /
+				${c1}   \\ v /
+				${c1}   / . \\
+				${c1}  /_/ \\ \\
+				${c1}       \\_\\
+			EOF
+        ;;
+
+        [Kk][Dd][Ee]*[Nn]eon*)
+            read_ascii 6 <<-EOF
+				${c7}   .${c6}__${c7}.${c6}__${c7}.
+				${c6}  /  _${c7}.${c6}_  \\
+				${c6} /  /   \\  \\
+				${c7} . ${c6}|  ${c7}O${c6}  | ${c7}.
+				${c6} \\  \\_${c7}.${c6}_/  /
+				${c6}  \\${c7}.${c6}__${c7}.${c6}__${c7}.${c6}/
 			EOF
         ;;
 
@@ -1158,6 +1242,16 @@ get_ascii() {
 			EOF
         ;;
 
+        [Oo]pen[Ss][Uu][Ss][Ee]*[Tt]umbleweed*)
+            read_ascii 2 <<-EOF
+				${c2}  _____   ______
+				${c2} / ____\\ / ____ \\
+				${c2}/ /    \`/ /    \\ \\
+				${c2}\\ \\____/ /,____/ /
+				${c2} \\______/ \\_____/
+			EOF
+        ;;
+
         [Oo]pen[Ss][Uu][Ss][Ee]*|[Oo]pen*SUSE*|SUSE*|suse*)
             read_ascii 2 <<-EOF
 				${c2}  _______
@@ -1215,6 +1309,17 @@ get_ascii() {
 				${c7}| |         | |
 				${c7}| |_________| |
 				${c7}|_____________|
+			EOF
+        ;;
+
+        [Rr]aspbian*)
+            read_ascii 1 <<-EOF
+				${c1}  __  __
+				${c1} (_\\)(/_)
+				${c2} (_(__)_)
+				${c2}(_(_)(_)_)
+				${c2} (_(__)_)
+				${c2}   (__)
 			EOF
         ;;
 
@@ -1307,6 +1412,11 @@ get_ascii() {
 main() {
     # Clear screen
     clear
+
+    [ "$1" = --version ] && {
+        printf 'pfetch 0.7.0\n'
+        exit
+    }
 
     # Hide 'stderr' unless the first argument is '-v'. This saves
     # polluting the script with '2>/dev/null'.
