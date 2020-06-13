@@ -23,17 +23,17 @@ pdfpreview() {
 }
 
 elsepreview() {
-	bat --color=always --theme=base16 -p "$1"
+    bat --color=always --theme=base16 -p "$1"
 }
 
 case "$1" in
-	*.tar*) tar tf "$1" ;;
-	*.zip) unzip -l "$1" ;;
-	*.rar) unrar l "$1" || file "$1" ;;
-	*.7z) 7z l "$1" ;;
-	*.pdf) pdftotext "$1" - || pdfpreview "$1" ;;
-	*.png | *.jpg | *.JPG | *.jpeg | *.gif | *.webp) imagepreview "$1" "$2" ;;
-	*.mp4 | *.mkv | *.mov | *.avi | *.m4v | *.webm) videopreview "$1" "$2" ;;
-	*.mp3) audiopreview "$1" ;;
-	*) elsepreview "$1" ;;
+    *.tar*) tar tf "$1" ;;
+    *.zip) unzip -l "$1" ;;
+    *.rar) unrar l "$1" || file "$1" ;;
+    *.7z) 7z l "$1" ;;
+    *.pdf) pdftotext "$1" - || pdfpreview "$1" ;;
+    *.png | *.jpg | *.JPG | *.jpeg | *.gif | *.webp) imagepreview "$1" "$2" ;;
+    *.mp4 | *.mkv | *.mov | *.avi | *.m4v | *.webm) videopreview "$1" "$2" ;;
+    *.mp3) audiopreview "$1" ;;
+    *) elsepreview "$1" ;;
 esac

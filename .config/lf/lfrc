@@ -26,38 +26,22 @@ cmd jumptodir ${{
 }}
 
 cmd moveto ${{
-    printf "Move to where?"
-    dest="$(cd $HOME && fd -a -H -t d | fzf --preview '')" &&
+    dest="$(cd $HOME && fd -a -H -t d | fzf --header='Move to where?' --preview '')" &&
     mv -iv $fx $dest &&
     notify-send "File(s) moved to $dest"
 }}
 
 cmd copyto ${{
-    printf "Copy to where?"
-    dest="$(cd $HOME && fd -a -H -t d | fzf --preview '')" &&
+    dest="$(cd $HOME && fd -a -H -t d | fzf --header='Copy to where?' --preview '')" &&
     cp -ivr $fx $dest &&
     notify-send "File(s) copied to $dest"
 }}
 
-cmd mkdir ${{
-    printf "Directory Name: "
-    read ans
-    mkdir $ans
-}}
+cmd mkdir $mkdir -p "$(echo $* | tr ' ' '\ ')"
 
-cmd mkfile ${{
-    printf "File Name: "
-    read ans
-    $EDITOR $ans
-}}
+cmd mkfile $touch "$(echo $* | tr ' ' '\ ')"
 
-cmd chmod ${{
-    printf "Change mode: "
-    read ans
-    for file in "$fx"; do
-        chmod $ans $file
-    done
-}}
+cmd chmod $chmod "$@" "$fx"
 
 cmd trash ${{
     files=$(printf "$fx" | tr '\n' ';')
@@ -74,17 +58,15 @@ cmd trash ${{
 }}
 
 cmd trashclear ${{
-	printf "Clear trash?[y/N]"
-	read ans
-	[ $ans = "y" ] && trash-empty &&
-	notify-send "Cleared trash"
+    printf "Clear trash?[y/N]"
+    read ans
+    [ $ans = "y" ] && trash-empty &&
+    notify-send "Cleared trash"
 }}
 
 cmd trashrestore ${{
-	printf "Restore from trash?[y/N]"
-	read ans
-	[ $ans = "y" ] && trash-restore &&
-	notify-send "Restored from trash"
+    trash-restore &&
+    notify-send "Restored from trash"
 }}
 
 cmd opentrash ${{
@@ -107,9 +89,9 @@ map T term
 map J jumptodir
 map C copyto
 map M moveto
-map md mkdir
-map mf mkfile
-map mc chmod
+map md push :mkdir<space>
+map mf push :mkfile<space>
+map cm push :chmod<space>
 map to opentrash
 map td trash
 map tc trashclear
