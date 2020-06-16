@@ -69,7 +69,7 @@ cmd trashrestore ${{
     notify-send "Restored from trash"
 }}
 
-cmd opentrash ${{
+cmd trashopen ${{
     lf -remote "send $id cd ~/.local/share/Trash/files"
 }}
 
@@ -92,7 +92,7 @@ map M moveto
 map md push :mkdir<space>
 map mf push :mkfile<space>
 map cm push :chmod<space>
-map to opentrash
+map to trashopen
 map td trash
 map tc trashclear
 map tr trashrestore
