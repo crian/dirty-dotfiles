@@ -60,10 +60,6 @@ cmd chmod ${{
 }}
 
 cmd trash ${{
-    printf "%s\n\t" "$fx"
-    printf "Move to trash?[y/N]"
-    read ans
-    [ $ans = "y" ] &&
     files=$(printf "$fx" | tr '\n' ';')
     while [ "$files" ]; do
         file=${files%%;*}
@@ -77,14 +73,14 @@ cmd trash ${{
     notify-send "$file moved to trash"
 }}
 
-cmd cleartrash ${{
+cmd trashclear ${{
 	printf "Clear trash?[y/N]"
 	read ans
 	[ $ans = "y" ] && trash-empty &&
 	notify-send "Cleared trash"
 }}
 
-cmd restoretrash ${{
+cmd trashrestore ${{
 	printf "Restore from trash?[y/N]"
 	read ans
 	[ $ans = "y" ] && trash-restore &&
@@ -116,8 +112,8 @@ map mf mkfile
 map mc chmod
 map to opentrash
 map td trash
-map tc cleartrash
-map tr restoretrash
+map tc trashclear
+map tr trashrestore
 map w setwp
 map r push :rename<space>
 map <enter> shell
