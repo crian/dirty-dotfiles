@@ -7,17 +7,17 @@ y=$(( $2 / 5 ))
 h=$(( $2 / 50 ))
 font="crisp:size=12:antialias=true:autohint=true"
 
-DIALOG_RESULT=$(echo -e 'lock\nlogout\nreboot\npoweroff\nexit' | dmenu -i -f -p "Power:" )
+DIALOG_RESULT=$(printf "lock\nlogout\nreboot\npoweroff\nexit" | dmenu -i -f -p "Power:" )
 
 echo "This result is : $DIALOG_RESULT"
 sleep 1;
 
 if [ "$DIALOG_RESULT" = "lock" ];
 then
-    exec slock
+    exec lock
 elif [ "$DIALOG_RESULT" = "logout" ];
 then
-    exec killall xinit
+    exec pkill -KILL -u $USER
 elif [ "$DIALOG_RESULT" = "reboot" ];
 then
     exec systemctl reboot

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-browser="brave --new-window"
+browser="chromium --new-window"
 engine=~/.config/search/engine
 
 url=$(sort $engine | sed 's/:.*//' | dmenu -i -p "Search Engine" | xargs -I % grep "%:" $engine | sed 's/.*://')

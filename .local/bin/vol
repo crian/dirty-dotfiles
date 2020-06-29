@@ -11,3 +11,4 @@ case "$1" in
 esac >/dev/null
 
 pkill -RTMIN+10 dwmblocks &
+pkill -RTMIN+10 i3blocks &

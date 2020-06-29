@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # pacbac - Create and restore from list all installed packages
 
 # Package list locations (official and local)

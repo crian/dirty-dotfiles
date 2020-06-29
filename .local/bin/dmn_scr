@@ -1,13 +1,13 @@
 #!/bin/sh
 
-chose=$(echo -ne "Fullscreen\nDelay(5)\nCrop" | dmenu -p "Scrot:")
-if [[ $chose = "Fullscreen" ]]; then
+chose=$(printf "Fullscreen\nDelay(5)\nCrop" | dmenu -p "Scrot:")
+if [ $chose = "Fullscreen" ]; then
 	scrot -e 'mv $f ~/Pictures/screenshots' 
 	notify-send "Screenshot saved"
-elif [[ $chose = "Delay(5)" ]]; then
+elif [ $chose = "Delay(5)" ]; then
 	scrot -d 5 -e 'mv $f ~/Pictures/screenshots'
 	notify-send "Screenshot saved"
-elif [[ $chose = "Crop" ]]; then
+elif [ $chose = "Crop" ]; then
 	scrot -s -e 'mv $f ~/Pictures/screenshots'
 	notify-send "Screenshot saved"
 fi
