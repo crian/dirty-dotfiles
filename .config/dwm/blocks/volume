@@ -2,9 +2,9 @@
 
 mute="$(pulsemixer --get-mute)"
 vol="$(pulsemixer --get-volume | awk '{print $1}')"
-if [[ $mute == 1 ]]; then
+if [ $mute = 1 ]; then
     printf "^c#8FBCBB^ ^d^Muted"
-elif [[ $mute == 0 ]]; then
+elif [ $mute = 0 ]; then
     case ${vol%?} in
            10) i='' ;;
         [6-9]) i='' ;;
