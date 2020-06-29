@@ -37,10 +37,10 @@ static const Rule rules[] = {
 	 *	WM_CLASS(STRING) = instance, class
 	 *	WM_NAME(STRING) = title
 	 */
-	/* class      instance    title       tags mask     iscentered   isfloating   monitor */
-	{ "Gimp",     NULL,       NULL,       0,            0,           1,           -1 },
-	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           0,           -1 },
-	{ "floatst",  NULL,       NULL,       0,            1,           1,           -1 },
+	/* class     instance  title           tags mask  isfloating  monitor */
+	{ "Gimp",    NULL,     NULL,           0,         1,          -1 },
+	{ "Firefox", NULL,     NULL,           1 << 8,    0,          -1 },
+	{ "floatst", NULL,     NULL,           0,         1,          -1 },
 };
 
 /* layout(s) */
@@ -80,6 +80,7 @@ static const char *dmenuclp[]      = { "dmn_clip", NULL };
 static const char *dmenusrh[]      = { "dmn_search", NULL };
 static const char *dmenunet[]      = { "networkmanager_dmenu", NULL };
 static const char *termcmd[]       = { "st", NULL };
+static const char *floatterm[]     = { "st", "-c", "floatst", NULL };
 static const char *tabterm[]       = { "tabbed", "-d", "-c", "st", "-w", NULL };
 static const char scratchpadname[] = "scratchpad";
 static const char *scratchpadcmd[] = { "st", "-t", scratchpadname, "-g", "70x20", NULL };
@@ -102,18 +103,20 @@ static Key keys[] = {
 	{ MODKEY,                       XK_w,      spawn,          {.v = dmenusrh } },
 	{ MODKEY,                       XK_n,      spawn,          {.v = dmenunet } },
 	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
-	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = tabterm } },
-	{ MODKEY|ControlMask,           XK_Return, spawn,          SHCMD("st -c floatst") },
+	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = floatterm } },
+	{ MODKEY|ControlMask,           XK_Return, spawn,          {.v = tabterm } },
 	{ MODKEY,                       XK_s,      togglescratch,  {.v = scratchpadcmd } },
 	{ MODKEY,                       XK_Down,   spawn,          {.v = plyrplay } },
 	{ MODKEY,                       XK_Up,     spawn,          {.v = plyrstop } },
 	{ MODKEY,                       XK_Right,  spawn,          {.v = plyrnext } },
 	{ MODKEY,                       XK_Left,   spawn,          {.v = plyrprev } },
-	{ MODKEY|ShiftMask,             XK_d,      spawn,          ESHCMD("dmenufm") },
-	{ MODKEY|ShiftMask,             XK_w,      spawn,          ESHCMD("$BROWSER") },
-	{ MODKEY|ShiftMask,             XK_f,      spawn,          ESHCMD("pcmanfm") },
-	{ MODKEY|ShiftMask,             XK_s,      spawn,          ESHCMD("spotify") },
+	{ MODKEY|ShiftMask,             XK_p,      spawn,          SHCMD("pcmanfm") },
+	{ MODKEY|ShiftMask,             XK_w,      spawn,          SHCMD("$BROWSER") },
+	{ MODKEY|ShiftMask,             XK_f,      spawn,          SHCMD("st -e lf") },
+	{ MODKEY|ShiftMask,             XK_s,      spawn,          SHCMD("spoti") },
 	{ MODKEY|ShiftMask,             XK_b,      togglebar,      {0} },
+	{ MODKEY|ControlMask,           XK_j,      shiftview,      {.i = +1 } },
+	{ MODKEY|ControlMask,           XK_k,      shiftview,      {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_j,      rotatestack,    {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_k,      rotatestack,    {.i = -1 } },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },

@@ -1,16 +1,16 @@
 # Maintainer: crian <crian84@gmail.com>
 
-pkgname=st-crian-git
-pkgver=r1118.3a33b76
+pkgname=dwm-crian-git
+pkgver=r1704.2dfb9e9
 pkgrel=1
-pkgdesc='A simple virtual terminal emulator for X'
+pkgdesc='A dynamic window manager for X'
 arch=('x86_64')
 url="https://github.com/crian/suckless"
 license=('MIT')
-depends=('libxft')
-conflicts=('st')
-provides=('st')
-source=("git+${url}.git#branch=st")
+depends=('libx11' 'libxinerama' 'libxft')
+conflicts=('dwm')
+provides=('dwm')
+source=("git+${url}.git#branch=dwm")
 sha256sums=('SKIP')
 
 pkgver() {
@@ -22,6 +22,8 @@ prepare() {
     cd "$srcdir/suckless"
     echo 'Copying config.h from $startdir if it exists...'
     [ -f "${startdir}/config.h" ] && cp "${startdir}/config.h" . || true
+    echo 'Copying dwm.desktop from $startdir if it exists...'
+    [ -f "${startdir}/dwm.desktop" ] && cp "${startdir}/dwm.desktop" . || true
 }
 
 package() {
@@ -29,4 +31,5 @@ package() {
     make PREFIX=/usr DESTDIR="$pkgdir" install
     install -m644 -D LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
     install -m644 -D README "$pkgdir/usr/share/doc/$pkgname/README"
+    #install -m644 -D dwm.desktop "$pkgdir/usr/share/xsessions/dwm.desktop"
 }

@@ -1,7 +1,7 @@
 # Maintainer: crian <crian84@gmail.com>
 
 pkgname=dwmblocks
-pkgver=r32.b0e04ca
+pkgver=r34.7588356
 pkgrel=1
 pkgdesc='Modular status bar for dwm'
 arch=('any')

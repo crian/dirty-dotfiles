@@ -1,16 +1,16 @@
 # Maintainer: crian <crian84@gmail.com>
 
-pkgname=tabbed-crian-git
-pkgver=r258.2dd9747
+pkgname=st-crian-git
+pkgver=r1137.f0f5df7
 pkgrel=1
-pkgdesc='Simple generic tabbed fronted to xembed aware applications'
+pkgdesc='A simple virtual terminal emulator for X'
 arch=('x86_64')
 url="https://github.com/crian/suckless"
 license=('MIT')
-depends=('libx11')
-conflicts=('tabbed')
-provides=('tabbed')
-source=("git+${url}.git#branch=tabbed")
+depends=('libxft')
+conflicts=('st')
+provides=('st')
+source=("git+${url}.git#branch=st")
 sha256sums=('SKIP')
 
 pkgver() {

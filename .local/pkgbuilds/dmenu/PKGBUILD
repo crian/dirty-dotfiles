@@ -1,7 +1,7 @@
 # Maintainer: crian <crian84@gmail.com>
 
 pkgname=dmenu-crian-git
-pkgver=r577.9ee710d
+pkgver=r578.0d865fc
 pkgrel=1
 pkgdesc='A generic menu for X'
 arch=('x86_64')
