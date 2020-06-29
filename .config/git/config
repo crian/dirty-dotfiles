@@ -1,0 +1,38 @@
+[core]
+    editor = $EDITOR
+    pager = $PAGER
+[user]
+    signingkey = 313858BD269FBEC7
+    name = crian
+    email = crian84@gmail.com
+[push]
+    default = simple
+[color]
+    ui = auto
+[commit]
+    gpgsign = true
+[format]
+    signoff = true
+[credential]
+    helper = cache --timeout=3000
+[alias]
+    a = add
+    aa = add -A
+    c = commit
+    ca = commit --amend
+    cs = commit -s
+    cp = cherry-pick
+    cpa = cherry-pick --abort
+    cpc = cherry-pick --continue
+    cpe = cherry-pick --edit
+    d = diff
+    rh = reset --hard
+    m = merge --signoff
+    ma = merge --abort
+    mc = merge --continue
+    p = push
+    pf = push --force
+    pr = pull --rebase
+    s = status
+[http]
+    postBuffer = 524288000

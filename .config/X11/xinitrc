@@ -1,0 +1,39 @@
+#!/bin/sh
+
+# merge xresources
+xrdb -merge ~/.config/X11/Xresources
+
+# remap caps to esc
+setxkbmap -option caps:escape
+
+# set cursor
+xsetroot -cursor_name left_ptr
+
+# increase key repeat rate
+xset r rate 250 30
+
+# set wallpaper
+setwall &
+
+# notification daemon
+dunst &
+
+# start compositor
+picom &
+
+# hide mouse when typing
+xbanish &
+
+# clipboard manager
+clipmenud &
+
+# start xautolock with slock
+xautolock -time 30 -locker slock &
+
+# load monitor calibration profile
+xcalib -d :0 $HOME/.local/share/color/B140HAN01_2.icm
+
+# start dwm
+while true; do
+    dwm 2> ~/.cache/dwm.log
+done

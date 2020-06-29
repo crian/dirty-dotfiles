@@ -1,0 +1,66 @@
+#
+# ~/.zprompt
+#
+
+# Prerequisites
+autoload -U colors && colors
+autoload -Uz vcs_info
+setopt PROMPT_SUBST
+
+# Directory
+dir() {
+    print "%{$fg[white]%}${${PWD/#$HOME/~}//(#b)([^\/])[^\/][^\/]#\//$match[1]/} "
+}
+
+# Background jobs
+bgjobs() {
+    print "%{$fg[yellow]%}%(1j.↓%j .)"
+}
+
+# Symbol
+symbol() {
+    print "%(?.%F{blue}.%F{red})❯%f "
+}
+
+# Git status
+zstyle ':vcs_info:*' enable git
+zstyle ':vcs_info:git*' check-for-changes true
+zstyle ':vcs_info:git*' use-prompt-escapes true
+zstyle ':vcs_info:git*' stagedstr "%F{green}%f"
+zstyle ':vcs_info:git*' unstagedstr "%F{yellow}%f"
+
+precmd() {
+    if [[ -z $(git ls-files --other --exclude-standard -- $(git rev-parse --show-cdup 2>/dev/null) 2>/dev/null) ]]; then
+        untracked=''
+    else
+        untracked="%F{red}%f"
+    fi
+
+    if [ -d .git ]; then
+        if [[ $(git remote) != "" ]]; then
+            branch="$(git rev-parse --abbrev-ref HEAD)"
+            behind="$(git rev-list --right-only --count $branch...origin/$branch)"
+            ahead="$(git rev-list --left-only --count $branch...origin/$branch)"
+            if [[ $ahead -ne 0 ]]; then
+                ahead="%F{cyan}↑$ahead%f"
+            else
+                ahead=""
+            fi
+            if [[ $behind -ne 0 ]]; then
+                behind="%F{magenta}↓$behind%f"
+            else
+                behind=""
+            fi
+        fi
+    fi
+
+    symbol="%F{blue}%f"
+
+    zstyle ':vcs_info:git*' formats "$symbol %b%c%u$untracked%{$reset_color%} $ahead$behind"
+    zstyle ':vcs_info:git*' actionformats "$symbol (%a|%b)%c%u$untracked%{$reset_color%} $ahead$behind"
+    vcs_info
+}
+
+# Prompt
+PROMPT='$(dir)$(bgjobs)$(symbol)'
+RPROMPT='${vcs_info_msg_0_}'

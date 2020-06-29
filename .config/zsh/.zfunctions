@@ -4,8 +4,8 @@
 
 # Make dir and cd into it
 mkcd() {
-  mkdir -p "$1"
-  cd "$1"
+    mkdir -p "$1"
+    cd "$1"
 }
 
 # cd and ls into dir
@@ -57,16 +57,16 @@ extract() {
 
 # Search and install packages with yay and fzf
 yi() {
-	SELECTED_PKGS="$(yay -Slq | fzf --header='Install packages' -m --preview 'yay -Si {1}')"
-	if [ -n "$SELECTED_PKGS" ]; then
-		yay -S $(echo $SELECTED_PKGS)
-	fi
+    SELECTED_PKGS="$(yay -Slq | fzf --header='Install packages' -m --preview 'yay -Si {1}')"
+    if [ -n "$SELECTED_PKGS" ]; then
+        yay -S $(echo $SELECTED_PKGS)
+    fi
 }
 
 # Search and remove packages with yay and fzf
 yr() {
-	SELECTED_PKGS="$(yay -Qsq | fzf --header='Remove packages' -m --preview 'yay -Si {1}')"
-	if [ -n "$SELECTED_PKGS" ]; then
-		yay -Rns $(echo $SELECTED_PKGS)
-	fi
+    SELECTED_PKGS="$(yay -Qsq | fzf --header='Remove packages' -m --preview 'yay -Si {1}')"
+    if [ -n "$SELECTED_PKGS" ]; then
+        yay -Rns $(echo $SELECTED_PKGS)
+    fi
 }

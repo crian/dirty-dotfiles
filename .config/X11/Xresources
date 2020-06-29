@@ -14,7 +14,7 @@ Xft.lcdfilter: lcdfilter
 ! Color Scheme
 !--------------
 
-#include ".colors/nord"
+#include "colors/nord"
 
 !-----------
 ! st config
