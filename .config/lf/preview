@@ -23,7 +23,7 @@ pdfpreview() {
 }
 
 elsepreview() {
-    bat --color=always --theme=base16 -p "$1"
+    bat --color=always --theme="Nord" -p "$1"
 }
 
 case "$1" in
