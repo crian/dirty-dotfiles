@@ -12,9 +12,9 @@
 - Window Manager: `dwm`
 - Shell: `zsh`
 - Terminal Emulator: `st`
-- File Manager: `dmenufm, pcmanfm`
+- File Manager: `lf`
 - Application Launcher: `dmenu`
 - Compositor: `picom`
 - Status Bar: `dwmblocks`
 - Notification: `dunst`
-- Text Editor: `nvim, nano`
+- Text Editor: `nvim`
