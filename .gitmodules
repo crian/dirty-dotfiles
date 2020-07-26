@@ -1,6 +1,0 @@
-[submodule ".config/mpv/scripts/mpvSockets"]
-	path = .config/mpv/scripts/mpvSockets
-	url = https://github.com/wis/mpvSockets.git
-[submodule ".config/mpv/scripts/mpv-mpris"]
-	path = .config/mpv/scripts/mpv-mpris
-	url = https://github.com/hoyon/mpv-mpris.git
