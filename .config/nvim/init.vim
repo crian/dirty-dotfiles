@@ -102,7 +102,7 @@ set signcolumn=yes                                      " always draw signcolumn
 set background=dark
 colorscheme nord
 let g:airline_theme='nord'
-highlight Pmenu guibg='00010a' guifg=white              " popup menu colors
+highlight Pmenu guifg=white                             " popup menu colors
 highlight Comment gui=italic cterm=italic               " italic comments
 highlight Normal gui=none
 highlight NonText guibg=none
@@ -335,6 +335,19 @@ command! -nargs=0 Format :call CocAction('format')
 " Add `:OR` command for organize imports of the current buffer.
 command! -nargs=0 OR :call CocAction('runCommand', 'editor.action.organizeImport')
 
+" Toggle Tabs/Spaces
+function TabToggle()
+    if &expandtab
+        set shiftwidth=4
+        set softtabstop=0
+        set noexpandtab
+    else
+        set shiftwidth=4
+        set softtabstop=4
+        set expandtab
+    endif
+endfunction
+
 "----------
 " Mappings
 "----------
@@ -360,6 +373,7 @@ map <F4> :Vista!!<CR>
 map <F5> :NERDTreeToggle<CR>
 nmap <leader>g :Goyo<CR>
 noremap <silent> <esc><esc> :noh<return>
+nmap <F9> mz:execute TabToggle()<CR>'z
 
 " use a different buffer for dd
 nnoremap d "_d
