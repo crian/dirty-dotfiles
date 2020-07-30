@@ -52,6 +52,6 @@ if [ -f $HOME/.config/lf/icons ]; then
 fi
 
 # Autostart x at login
-if systemctl -q is-active graphical.target && [[ ! $DISPLAY && $XDG_VTNR -eq 1 ]]; then
+if [ -z $DISPLAY ] && [ $(tty) = /dev/tty1 ]; then
     exec startx "$XDG_CONFIG_HOME/X11/xinitrc"
 fi
