@@ -69,47 +69,29 @@ static const Layout layouts[] = {
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
-/* helper for executing programs */
-#define ESHCMD(cmd) SHCMD("exec " cmd)
-
 /* commands */
 static char dmenumon[2]            = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[]      = { "dmn_run", NULL };
-static const char *dmenupwr[]      = { "dmn_power", NULL };
-static const char *dmenuclp[]      = { "dmn_clip", NULL };
-static const char *dmenusrh[]      = { "dmn_search", NULL };
-static const char *dmenunet[]      = { "networkmanager_dmenu", NULL };
-static const char *termcmd[]       = { "st", NULL };
-static const char *floatterm[]     = { "st", "-c", "floatst", NULL };
-static const char *tabterm[]       = { "tabbed", "-d", "-c", "st", "-w", NULL };
+static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", normbgcolor, "-nf", normfgcolor, "-sb", selbgcolor, "-sf", selfgcolor, NULL };
+static const char *termcmd[]  = { "st", NULL };
 static const char scratchpadname[] = "scratchpad";
 static const char *scratchpadcmd[] = { "st", "-t", scratchpadname, "-g", "70x20", NULL };
-static const char *mutecmd[]       = { "vol", "mute", NULL };
-static const char *volupcmd[]      = { "vol", "up", NULL };
-static const char *voldowncmd[]    = { "vol", "down", NULL };
-static const char *briupcmd[]      = { "bri", "up", NULL };
-static const char *bridowncmd[]    = { "bri", "down", NULL };
-static const char *plyrplay[]      = { "playerctl", "play-pause", NULL };
-static const char *plyrstop[]      = { "playerctl", "stop", NULL };
-static const char *plyrnext[]      = { "playerctl", "next", NULL };
-static const char *plyrprev[]      = { "playerctl", "previous", NULL };
 
 #include <X11/XF86keysym.h>
 static Key keys[] = {
 	/* modifier                     key        function        argument */
-	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
-	{ MODKEY,                       XK_Escape, spawn,          {.v = dmenupwr } },
-	{ MODKEY,                       XK_c,      spawn,          {.v = dmenuclp } },
-	{ MODKEY,                       XK_w,      spawn,          {.v = dmenusrh } },
-	{ MODKEY,                       XK_n,      spawn,          {.v = dmenunet } },
 	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
-	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = floatterm } },
-	{ MODKEY|ControlMask,           XK_Return, spawn,          {.v = tabterm } },
 	{ MODKEY,                       XK_s,      togglescratch,  {.v = scratchpadcmd } },
-	{ MODKEY,                       XK_Down,   spawn,          {.v = plyrplay } },
-	{ MODKEY,                       XK_Up,     spawn,          {.v = plyrstop } },
-	{ MODKEY,                       XK_Right,  spawn,          {.v = plyrnext } },
-	{ MODKEY,                       XK_Left,   spawn,          {.v = plyrprev } },
+	{ MODKEY,                       XK_p,      spawn,          SHCMD("dmn_run") },
+	{ MODKEY,                       XK_Escape, spawn,          SHCMD("dmn_power") },
+	{ MODKEY,                       XK_c,      spawn,          SHCMD("dmn_clip") },
+	{ MODKEY,                       XK_w,      spawn,          SHCMD("dmn_search") },
+	{ MODKEY,                       XK_n,      spawn,          SHCMD("networkmanager_dmenu") },
+	{ MODKEY|ShiftMask,             XK_Return, spawn,          SHCMD("st -c floatst") },
+	{ MODKEY|ControlMask,           XK_Return, spawn,          SHCMD("tabbed -d -c st -w") },
+	{ MODKEY,                       XK_Down,   spawn,          SHCMD("playerctl play-pause") },
+	{ MODKEY,                       XK_Up,     spawn,          SHCMD("playerctl stop") },
+	{ MODKEY,                       XK_Right,  spawn,          SHCMD("playerctl next") },
+	{ MODKEY,                       XK_Left,   spawn,          SHCMD("playerctl previous") },
 	{ MODKEY|ShiftMask,             XK_p,      spawn,          SHCMD("pcmanfm") },
 	{ MODKEY|ShiftMask,             XK_w,      spawn,          SHCMD("$BROWSER") },
 	{ MODKEY|ShiftMask,             XK_f,      spawn,          SHCMD("st -e lf") },
@@ -156,15 +138,15 @@ static Key keys[] = {
 	TAGKEYS(                        XK_7,                      6)
 	TAGKEYS(                        XK_8,                      7)
 	TAGKEYS(                        XK_9,                      8)
-	{ 0,                            XF86XK_AudioMute,        spawn, {.v = mutecmd } },
-	{ 0,                            XF86XK_AudioLowerVolume, spawn, {.v = voldowncmd } },
-	{ 0,                            XF86XK_AudioRaiseVolume, spawn, {.v = volupcmd } },
-	{ 0,                            XF86XK_MonBrightnessUp,  spawn, {.v = briupcmd } },
-	{ 0,                            XF86XK_MonBrightnessDown,spawn, {.v = bridowncmd } },
-	{ 0,                            XF86XK_AudioNext,        spawn, {.v = plyrnext } },
-	{ 0,                            XF86XK_AudioPrev,        spawn, {.v = plyrprev } },
-	{ 0,                            XF86XK_AudioPlay,        spawn, {.v = plyrplay } },
-	{ 0,                            XF86XK_AudioStop,        spawn, {.v = plyrstop } },
+	{ 0,                            XF86XK_AudioMute,        spawn, SHCMD("vol mute") },
+	{ 0,                            XF86XK_AudioLowerVolume, spawn, SHCMD("vol down") },
+	{ 0,                            XF86XK_AudioRaiseVolume, spawn, SHCMD("vol up") },
+	{ 0,                            XF86XK_MonBrightnessUp,  spawn, SHCMD("bri up") },
+	{ 0,                            XF86XK_MonBrightnessDown,spawn, SHCMD("bri down") },
+	{ 0,                            XF86XK_AudioNext,        spawn, SHCMD("playerctl next") },
+	{ 0,                            XF86XK_AudioPrev,        spawn, SHCMD("playerctl previous") },
+	{ 0,                            XF86XK_AudioPlay,        spawn, SHCMD("playerctl play-pause") },
+	{ 0,                            XF86XK_AudioStop,        spawn, SHCMD("playerctl stop") },
 };
 
 /* button definitions */
