@@ -1,0 +1,5 @@
+#!/bin/sh
+
+wid=$(xdo id);
+xdo hide && "$@";
+xdo show "$wid";
