@@ -67,6 +67,6 @@ yi() {
 yr() {
     SELECTED_PKGS="$(yay -Qsq | fzf --header='Remove packages' -m --preview 'yay -Si {1}')"
     if [ -n "$SELECTED_PKGS" ]; then
-        yay -Rns $(echo $SELECTED_PKGS)
+        yay -Runs $(echo $SELECTED_PKGS)
     fi
 }
