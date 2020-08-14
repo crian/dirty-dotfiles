@@ -42,9 +42,6 @@ Plug 'easymotion/vim-easymotion'
 Plug '907th/vim-auto-save'
 Plug 'norcalli/nvim-colorizer.lua'
 Plug 'lambdalisue/suda.vim'
-Plug 'preservim/nerdtree', { 'on': [ 'NERDTreeToggle', 'NERDTreeFind' ] }
-Plug 'Xuyuanp/nerdtree-git-plugin'
-Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 Plug 'luochen1990/rainbow'
 call plug#end()
 
@@ -154,23 +151,17 @@ inoremap <silent><expr> <TAB>
       \ <SID>check_back_space() ? "\<TAB>" :
       \ coc#refresh()
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-
 " Navigate snippet placeholders using tab
 let g:coc_snippet_next = '<Tab>'
 let g:coc_snippet_prev = '<S-Tab>'
-
 " Use enter to accept snippet expansion
 inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<CR>"
-
 function! s:check_back_space() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
-
 let g:coc_snippet_next = '<tab>'
-
 autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
-
 " list of the extensions required
 let g:coc_global_extensions = [
             \'coc-yank',
@@ -228,30 +219,6 @@ let g:vista_executive_for = {
 let g:vista_icon_indent = ["╰─▸ ", "├─▸ "]
 let g:vista#renderer#enable_icon = 1
 let g:vista_sidebar_width = 50
-
-" NERDTree
-" if nerdtree is only window, kill nerdtree so buffer can die
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | :bdelete | endif
-let g:NERDTreeQuitOnOpen = 0
-let g:NERDTreeShowHidden = 1
-let g:NERDChristmasTree = 1
-let g:NERDTreeAutoCenter = 1
-let g:NERDTreeMinimalUI = 1
-let g:NERDTreeWinSize = 30
-let g:NERDTreeDirArrowExpandable = '▷'
-let g:NERDTreeDirArrowCollapsible = '▼'
-let g:NERDTreeIndicatorMapCustom = {
-        \ "modified"  : "✹",
-        \ "staged"    : "✚",
-        \ "untracked" : "✭",
-        \ "renamed"   : "➜",
-        \ "unmerged"  : "═",
-        \ "deleted"   : "✖",
-        \ "dirty"     : "✗",
-        \ "clean"     : "✔︎",
-        \ 'ignored'   : '☒',
-        \ "unknown"   : "?"
-        \ }
 
 "---------------
 " Auto commands
@@ -370,7 +337,6 @@ nmap <leader>c :Commands<CR>
 map <leader>rg :Rg<CR>
 map <leader>v :Vista finder<CR>
 map <F4> :Vista!!<CR>
-map <F5> :NERDTreeToggle<CR>
 nmap <leader>g :Goyo<CR>
 noremap <silent> <esc><esc> :noh<return>
 nmap <F9> mz:execute TabToggle()<CR>'z
