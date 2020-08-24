@@ -1,5 +1,5 @@
 # Basic vars
-set shell sh
+set shell bash
 set previewer ~/.config/lf/preview
 set shellopts '-eu'
 set ifs "\n"
@@ -8,21 +8,24 @@ set color256
 set icons
 set hidden
 set drawbox
+set period 1
 
 # cmds/functions
 cmd open ${{
     case $(file --mime-type $f -b) in
+        image/vnd.djvu|application/pdf|application/octet-stream) setsid -f zathura $fx >/dev/null 2>&1 ;;
         text/*) setsid $TERMINAL -e $EDITOR $fx >/dev/null 2>&1 & ;;
-        image/*) rotdir $f | grep -i "\.\(png\|jpg\|jpeg\|gif\|webp\)\(_large\)*$" | setsid sxiv -aio 2>/dev/null | lf-select & ;;
-        audio/*) mpv --input-ipc-server=/tmp/mpvsoc$(date +%%s) $f ;;
-        video/*) setsid mpv --input-ipc-server=/tmp/mpvsoc$(date +%%s) $f -quiet >/dev/null 2>&1 & ;;
-        application/pdf) setsid zathura $fx >/dev/null 2>&1 & ;;
-        *) for f in $fx; do setsid $OPENER $f >/dev/null 2>&1 & done;;
+        image/x-xcf|image/svg+xml) setsid -f gimp $f >/dev/null 2>&1 ;;
+        image/*) rotdir $f | grep -i "\.\(png\|jpg\|jpeg\|gif\|webp\|tif\)\(_large\)*$" | sxiv -aio 2>/dev/null | lf-select ;;
+        audio/*) mpv --audio-display=no $f ;;
+        video/*) setsid -f mpv $f -quiet >/dev/null 2>&1 ;;
+        application/pdf|application/vnd*|application/epub*) setsid -f zathura $fx >/dev/null 2>&1 ;;
+        *) for f in $fx; do setsid -f $OPENER $f >/dev/null 2>&1; done;;
     esac
 }}
 
 cmd jumptodir ${{
-    lf -remote "send $id cd $(cd $HOME && fd -a -H -t d -d 2 | fzf --preview '')"
+    lf -remote "send $id cd $(cd $HOME && fd -a -H -t d -d 3 | fzf --preview '')"
 }}
 
 cmd moveto ${{
@@ -78,7 +81,7 @@ cmd rename %[ -e $1 ] && printf "File exists" || mv $f $1
 cmd setwp %setwall "$f"
 
 cmd term ${{
-    ( $TERMINAL & ) &>/dev/null
+    setsid -f $TERMINAL >/dev/null 2>&1 &
 }}
 
 # Bindings
