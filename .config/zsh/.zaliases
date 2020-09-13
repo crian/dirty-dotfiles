@@ -2,8 +2,10 @@
 # ~/.zaliases
 #
 
-alias v="$EDITOR"
-alias sz="source ~/.zshrc"
+alias v="nvim"
+alias vi="nvim"
+alias vim="nvim"
+alias sz="source ~/.config/zsh/.zshrc"
 alias ls="exa -h --icons --color=auto --group-directories-first"
 alias la="ls -a"
 alias ll="ls -la"
