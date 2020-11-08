@@ -4,7 +4,6 @@ set previewer ~/.config/lf/preview
 set shellopts '-eu'
 set ifs "\n"
 set scrolloff 10
-set color256
 set icons
 set hidden
 set drawbox
